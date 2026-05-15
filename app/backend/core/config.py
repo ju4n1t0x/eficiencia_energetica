@@ -3,11 +3,11 @@ from pydantic_settings import BaseSettings
  
 class Settings(BaseSettings):
     # Base de datos
-    DB_HOST: str = "db"
-    DB_PORT: int = 5432
-    DB_NAME: str = "energia_db"
-    DB_USER: str = "postgres"
-    DB_PASS: str = "postgres"
+    DB_HOST: str 
+    DB_PORT: int 
+    DB_NAME: str 
+    DB_USER: str 
+    DB_PASS: str 
  
     # FastAPI
     DEBUG: bool = True

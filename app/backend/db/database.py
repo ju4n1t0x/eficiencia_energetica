@@ -2,6 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from sqlalchemy.orm import DeclarativeBase
 from core.config import settings
 
+
 # Motor async - usa asyncpg como drive
 engine = create_async_engine(
     settings.DATABASE_URL,
