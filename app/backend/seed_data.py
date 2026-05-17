@@ -1,5 +1,6 @@
 """
 Script de carga inicial de datos limpios a la DB.
+Ahora pasa por el PipelineDemanda antes de insertar.
 Ejecutar una sola vez: python seed_data.py
 """
 import asyncio
@@ -7,6 +8,7 @@ import pandas as pd
 from sqlalchemy import text
 from db.database import AsyncSessionLocal, engine, Base
 from models.registro_demanda import RegistroDemanda
+from services.pipeline import PipelineDemanda
 
 CSV_PATH = "ml/base_dataset/demanda_limpia.csv"
 BATCH_SIZE = 1000
@@ -18,17 +20,15 @@ async def seed():
         await conn.run_sync(Base.metadata.create_all)
 
     print(f"Leyendo {CSV_PATH}...")
-    df = pd.read_csv(CSV_PATH)
+    df_crudo = pd.read_csv(CSV_PATH)
+    print(f"Registros crudos: {len(df_crudo)}")
 
-    # Descartar columnas innecesarias
-    df = df.drop(columns=["Unnamed: 0", "indice_tiempo"], errors="ignore")
+    # Pasar por el pipeline de limpieza
+    pipeline = PipelineDemanda()
+    df_limpio, stats = pipeline.limpiar(df_crudo)
 
-    # Normalizar nombre de columna demanda
-    if "demanda_MWh" in df.columns:
-        df = df.rename(columns={"demanda_MWh": "demanda_mwh"})
-
-    total = len(df)
-    print(f"Total de registros a insertar: {total}")
+    print(f"Registros después del pipeline: {len(df_limpio)}")
+    print(f"Stats: {stats}")
 
     async with AsyncSessionLocal() as session:
         # Verificar si ya hay datos
@@ -39,9 +39,10 @@ async def seed():
             return
 
         # Insertar en batches
+        total = len(df_limpio)
         insertados = 0
         for i in range(0, total, BATCH_SIZE):
-            batch = df.iloc[i:i + BATCH_SIZE]
+            batch = df_limpio.iloc[i:i + BATCH_SIZE]
             registros = [
                 RegistroDemanda(**row.to_dict())
                 for _, row in batch.iterrows()
@@ -51,7 +52,7 @@ async def seed():
             insertados += len(registros)
             print(f"  Insertados {insertados}/{total}...")
 
-    print(f"Seed completo: {insertados} registros cargados.")
+    print(f"✅ Seed completo: {insertados} registros cargados y limpios.")
 
 
 if __name__ == "__main__":
