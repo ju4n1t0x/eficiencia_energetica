@@ -11,7 +11,24 @@ class Settings(BaseSettings):
  
     # FastAPI
     DEBUG: bool = True
-    API_PREFIX: str = "/api"
+    API_PREFIX: str = "/api/v1"
+
+    # JWT
+    SECRET_KEY: str
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 8   # 8 horas
+
+    # CORS - orígenes permitidos (frontend React)
+    ALLOWED_ORIGINS: list[str] = ["http://localhost:5173"]
+
+    # Seed del admin inicial
+    ADMIN_MAIL: str
+    ADMIN_PASSWORD: str
+
+    # ML - rutas a los archivos del modelo
+    BASE_DATASET_PATH: str = "ml/base_dataset/demandaltimosaos.csv"
+    MODEL_PATH: str = "ml/trained/gradient_boosting.joblib"
+    ENCODERS_PATH: str = "ml/trained/encoders.joblib"
  
     @property
     def DATABASE_URL(self) -> str:
