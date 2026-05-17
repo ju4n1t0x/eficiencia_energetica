@@ -9,6 +9,7 @@ from core.config import settings
 from core.security import hash_password
 
 from models import User, Rol
+from services.model_service import modelo
 
 # Routers
 from api.v1.endpoints import auth as auth_router
@@ -36,11 +37,19 @@ async def seed_admin():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Crear tablas al iniciar la aplicación
+    # 1. Crear tablas
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
+    # 2. Seed admin
     await seed_admin()
+
+    # 3. Cargar / entrenar modelo ML
+    async with AsyncSessionLocal() as db:
+        await modelo.init(db)
+
     yield
+
     # Al cerrar liberar conexiones
     await engine.dispose()
 
