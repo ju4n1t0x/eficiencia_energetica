@@ -14,6 +14,7 @@ from services.model_service import modelo
 # Routers
 from api.v1.endpoints import auth as auth_router
 from api.v1.endpoints import dataset as dataset_router
+from api.v1.endpoints import eda as eda_router
 
 
 async def seed_admin():
@@ -83,6 +84,7 @@ app.add_middleware(
 # Routers
 app.include_router(auth_router.router, prefix=settings.API_PREFIX)
 app.include_router(dataset_router.router, prefix=settings.API_PREFIX)
+app.include_router(eda_router.router, prefix=settings.API_PREFIX)
 
 @app.get("/health")
 async def health_check():
