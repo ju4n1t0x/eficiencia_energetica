@@ -63,6 +63,9 @@ class PipelineDemanda:
             if col.lower() == "demanda_mwh" and col != "demanda_mwh":
                 df = df.rename(columns={col: "demanda_mwh"})
                 break
+        # Strip de espacios en columnas de texto
+        cols_texto = df.select_dtypes(include="object").columns
+        df[cols_texto] = df[cols_texto].apply(lambda col: col.str.strip())
         return df
 
     def _descartar_columnas(self, df: pd.DataFrame) -> pd.DataFrame:
