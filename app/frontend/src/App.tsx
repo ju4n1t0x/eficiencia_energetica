@@ -4,6 +4,8 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
 import { login, fetchDashboardData, type DashboardData } from './api'
+import ChartCard from './components/ChartCard'
+import StatCard from './components/StatCard'
 import './App.css'
 
 // ── Constantes ─────────────────────────────────────────────────────────────
@@ -41,31 +43,6 @@ function buildImportanciaArr(importancia: DashboardData['importancia']) {
 }
 
 // ── Componentes ────────────────────────────────────────────────────────────
-
-function ChartCard({ title, endpoint, children }: {
-  title: string
-  endpoint: string
-  children: React.ReactNode
-}) {
-  return (
-    <div className="chart-card">
-      <div className="chart-header">
-        <h2>{title}</h2>
-        <code className="endpoint-badge">GET {endpoint}</code>
-      </div>
-      {children}
-    </div>
-  )
-}
-
-function StatCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="stat-card">
-      <span className="stat-label">{label}</span>
-      <span className="stat-value">{value}</span>
-    </div>
-  )
-}
 
 // ── App ────────────────────────────────────────────────────────────────────
 
