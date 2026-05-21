@@ -21,7 +21,7 @@ class ModeloEficienciaEnergetica:
     FEATURES_CATEGORICAS = [
         "tipo_agente", "region", "provincia",
         "categoria_area", "categoria_demanda",
-        "tarifa", "categoria_tarifa", "estacion"
+        "categoria_tarifa", "estacion"
     ]
     FEATURES_NUMERICAS = ["anio", "mes"]
     TARGET = "demanda_mwh"
@@ -56,8 +56,14 @@ class ModeloEficienciaEnergetica:
             print("[ModeloEficienciaEnergetica] Cargando modelo existente desde disco...")
             self._cargar_desde_disco()
         else:
-            print("[ModeloEficienciaEnergetica] No se encontró modelo, entrenando desde DB...")
-            await self.entrenar(db)
+            print("[ModeloEficienciaEnergetica] No se encontró modelo, verificando datos en DB...")
+            df = await self._cargar_datos_db(db)
+            if len(df) == 0:
+                print("[ModeloEficienciaEnergetica] DB vacía, esperando carga de datos.")
+                self.is_ready = False
+            else:
+                await self.entrenar(db)
+                await self.entrenar(db)
 
     async def entrenar(self, db: AsyncSession) -> dict:
         """
@@ -119,14 +125,14 @@ class ModeloEficienciaEnergetica:
     async def _cargar_datos_db(self, db: AsyncSession) -> pd.DataFrame:
         result = await db.execute(text("""
             SELECT anio, mes, tipo_agente, region, provincia,
-                   categoria_area, categoria_demanda, tarifa,
+                   categoria_area, categoria_demanda,
                    categoria_tarifa, estacion, demanda_mwh
             FROM registros_demanda
         """))
         rows = result.fetchall()
         return pd.DataFrame(rows, columns=[
             "anio", "mes", "tipo_agente", "region", "provincia",
-            "categoria_area", "categoria_demanda", "tarifa",
+            "categoria_area", "categoria_demanda",
             "categoria_tarifa", "estacion", "demanda_mwh"
         ])
 

@@ -18,7 +18,6 @@ class PrediccionRequest(BaseModel):
     provincia: str
     categoria_area: str
     categoria_demanda: str
-    tarifa: str
     categoria_tarifa: str
     estacion: str
 
