@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     ADMIN_PASSWORD: str
 
     # ML - rutas a los archivos del modelo
-    BASE_DATASET_PATH: str = "ml/base_dataset/demandaltimosaos.csv"
+    BASE_DATASET_PATH: str = "ml/base_dataset/demanda_limpia.csv"
     MODEL_PATH: str = "ml/trained/gradient_boosting.joblib"
     ENCODERS_PATH: str = "ml/trained/encoders.joblib"
  

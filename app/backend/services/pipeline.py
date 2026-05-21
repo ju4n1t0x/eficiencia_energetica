@@ -19,7 +19,7 @@ class PipelineDemanda:
 
     MAP_ESTACION = {
         12: "VERANO", 1: "VERANO",  2: "VERANO",
-        3:  "OTOÑO",  4: "OTOÑO",   5: "OTOÑO",
+        3:  "OTONO",  4: "OTONO",   5: "OTONO",
         6:  "INVIERNO", 7: "INVIERNO", 8: "INVIERNO",
         9:  "PRIMAVERA", 10: "PRIMAVERA", 11: "PRIMAVERA",
     }
@@ -58,14 +58,24 @@ class PipelineDemanda:
 
     def _normalizar_columnas(self, df: pd.DataFrame) -> pd.DataFrame:
         df.columns = df.columns.str.lower().str.strip()
-        # demanda_MWh → demanda_mwh
         for col in df.columns:
             if col.lower() == "demanda_mwh" and col != "demanda_mwh":
                 df = df.rename(columns={col: "demanda_mwh"})
                 break
-        # Strip de espacios en columnas de texto
+        # Normalización igual que notebook celda 88
         cols_texto = df.select_dtypes(include="object").columns
-        df[cols_texto] = df[cols_texto].apply(lambda col: col.str.strip())
+        for col in cols_texto:
+            df[col] = (
+                df[col]
+                .astype(str)
+                .str.normalize('NFKD')
+                .str.encode('ascii', errors='ignore')
+                .str.decode('utf-8')
+                .str.upper()
+                .str.strip()
+                .str.replace(r'[.\-\/]', ' ', regex=True)
+                .str.replace(r'\s+', ' ', regex=True)
+            )
         return df
 
     def _descartar_columnas(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -93,7 +103,7 @@ class PipelineDemanda:
 
     def _filtrar_demanda_invalida(self, df: pd.DataFrame) -> pd.DataFrame:
         antes = len(df)
-        df = df[df["demanda_mwh"] > 0]
+        df = df[df["demanda_mwh"] >= 0]
         self.stats["detalle"].append(f"Demanda <= 0 eliminada: {antes - len(df)}")
         return df
 
