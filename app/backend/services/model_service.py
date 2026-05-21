@@ -30,6 +30,7 @@ class ModeloEficienciaEnergetica:
         self.model: GradientBoostingRegressor | None = None
         self.encoders: dict[str, LabelEncoder] = {}
         self.is_ready: bool = False
+        self.last_metrics: dict | None = None
         self.model_path: str = settings.MODEL_PATH
         self.encoders_path: str = settings.ENCODERS_PATH
 
@@ -63,7 +64,6 @@ class ModeloEficienciaEnergetica:
                 self.is_ready = False
             else:
                 await self.entrenar(db)
-                await self.entrenar(db)
 
     async def entrenar(self, db: AsyncSession) -> dict:
         """
@@ -90,6 +90,7 @@ class ModeloEficienciaEnergetica:
 
         self._guardar_en_disco()
         self.is_ready = True
+        self.last_metrics = metricas
 
         return metricas
 
