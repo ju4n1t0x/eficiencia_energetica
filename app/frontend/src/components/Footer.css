@@ -1,0 +1,27 @@
+.footer {
+  width: 100%;
+  background-color: #121424;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+  border-top: 1px solid rgba(247, 240, 82, 0.1);
+}
+
+.footer-content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.footer-content p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.footer-content strong {
+  color: #FFB627;
+  font-weight: 600;
+}

@@ -72,3 +72,21 @@ export async function fetchDashboardData(token: string): Promise<DashboardData> 
   ])
   return { mensual, estacion, categoria, importancia, resumen }
 }
+
+export async function uploadDataset(token: string, file: File): Promise<any> {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  const res = await fetch(`${BASE_URL}/dataset/upload`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  })
+
+  if (!res.ok) {
+    const error = await res.json()
+    throw new Error(error.detail || 'Error al cargar el archivo')
+  }
+
+  return res.json()
+}

@@ -1,0 +1,119 @@
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 60vh;
+  width: 100%;
+}
+
+.page-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.2rem;
+  color: #FFB627;
+  font-weight: 800;
+  margin: 0;
+}
+
+.subtitle {
+  color: #888;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.page-body {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.upload-container {
+  background: #1a1a2e;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  transition: all 0.2s ease;
+}
+
+/* Feedback visual para Drag & Drop */
+.upload-container.dragging {
+  border: 2px dashed #FFB627;
+  background: rgba(255, 182, 39, 0.05);
+  transform: scale(1.02);
+}
+
+.drop-zone-message {
+  color: #888;
+  font-size: 0.95rem;
+  pointer-events: none; /* Crucial para que no rompa el drop */
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-button {
+  background-color: #FFB627;
+  color: #16182B;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-block;
+}
+
+.upload-button:hover {
+  background-color: #F7F052;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 182, 39, 0.2);
+}
+
+.upload-button:active {
+  transform: translateY(0);
+}
+
+.upload-container.uploading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.upload-button.disabled {
+  background-color: #444;
+  cursor: wait;
+  pointer-events: none;
+}
+
+.status-message {
+  margin-top: 1.5rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-align: center;
+  width: 100%;
+}
+
+.status-message.success {
+  background: rgba(46, 213, 115, 0.1);
+  color: #2ed573;
+  border: 1px solid rgba(46, 213, 115, 0.2);
+}
+
+.status-message.error {
+  background: rgba(255, 71, 87, 0.1);
+  color: #ff4757;
+  border: 1px solid rgba(255, 71, 87, 0.2);
+}
