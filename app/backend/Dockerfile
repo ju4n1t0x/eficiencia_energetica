@@ -1,4 +1,8 @@
-FROM ghcr.io/astral-sh/uv:python-3.12-trixie-slim
+FROM python:3.12-slim
+
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
+RUN pip install --no-cache-dir uv
 
 WORKDIR /app
 
