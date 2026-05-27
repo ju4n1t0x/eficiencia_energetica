@@ -13,12 +13,12 @@ router = APIRouter(prefix="/modelos", tags=["Modelos"])
 
 
 @router.get("/estado")
-async def estado_modelo(_: User = Depends(get_current_user)):
+async def estado_modelo():
     return modelo.get_status()
 
 
 @router.get("/metricas")
-async def metricas_modelo(_: User = Depends(get_current_user)):
+async def metricas_modelo():
     if not modelo.is_ready:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                             detail="El modelo no está listo todavía.")
@@ -33,7 +33,7 @@ async def metricas_modelo(_: User = Depends(get_current_user)):
 
 
 @router.get("/importancia-features")
-async def importancia_features(_: User = Depends(get_current_user)):
+async def importancia_features():
     try:
         return modelo.get_feature_importance()
     except RuntimeError as e:
@@ -41,12 +41,12 @@ async def importancia_features(_: User = Depends(get_current_user)):
 
 
 @router.get("/catalogos")
-async def catalogos(db: AsyncSession = Depends(get_db), _: User = Depends(get_current_user)):
+async def catalogos(db: AsyncSession = Depends(get_db) ):
     return await repo.get_catalogos(db)
 
 
 @router.post("/predecir", response_model=PrediccionResponse)
-async def predecir(body: PrediccionRequest, _: User = Depends(get_current_user)):
+async def predecir(body: PrediccionRequest ):
     try:
         resultado = modelo.predecir(body.model_dump())
         return PrediccionResponse(
