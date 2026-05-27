@@ -91,7 +91,7 @@ const [data, setData] = useState<DashboardData | null>(null)
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#2a2a3a" />
               <XAxis dataKey="anio" tick={AXIS_TICK} />
               <YAxis tickFormatter={(v) => `${(v / 1e6).toFixed(0)}M`} tick={AXIS_TICK} />
-              <Tooltip formatter={(v: number) => [`${fmt(v)} MWh`, 'Demanda total']} {...TOOLTIP_STYLE} />
+              <Tooltip formatter={(v) => [`${fmt(Number(v))} MWh`, 'Demanda total']} {...TOOLTIP_STYLE} />
               <Bar dataKey="demanda_total" fill="#F5A623" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -103,7 +103,7 @@ const [data, setData] = useState<DashboardData | null>(null)
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#2a2a3a" />
               <XAxis dataKey="label" tick={{ ...AXIS_TICK, fontSize: 10 }} interval={7} />
               <YAxis tickFormatter={(v) => `${(v / 1e6).toFixed(1)}M`} tick={AXIS_TICK} />
-              <Tooltip formatter={(v: number) => [`${fmt(v)} MWh`, 'Demanda']} {...TOOLTIP_STYLE} />
+              <Tooltip formatter={(v) => [`${fmt(Number(v))} MWh`, 'Demanda']} {...TOOLTIP_STYLE} />
               <Line type="monotone" dataKey="demanda_total" stroke="#F5A623" dot={false} strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>
@@ -115,7 +115,7 @@ const [data, setData] = useState<DashboardData | null>(null)
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#2a2a3a" />
               <XAxis dataKey="estacion" tick={AXIS_TICK} />
               <YAxis tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} tick={AXIS_TICK} />
-              <Tooltip formatter={(v: number) => [`${fmt(v)} MWh`, 'Promedio']} {...TOOLTIP_STYLE} />
+              <Tooltip formatter={(v) => [`${fmt(Number(v))} MWh`, 'Promedio']} {...TOOLTIP_STYLE} />
               <Bar dataKey="demanda_promedio" fill="#4A90D9" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -127,7 +127,7 @@ const [data, setData] = useState<DashboardData | null>(null)
               <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#2a2a3a" />
               <XAxis type="number" tickFormatter={(v) => `${(v / 1e6).toFixed(1)}M`} tick={AXIS_TICK} />
               <YAxis type="category" dataKey="categoria_demanda" width={140} tick={AXIS_TICK} />
-              <Tooltip formatter={(v: number) => [`${fmt(v)} MWh`, 'Total']} {...TOOLTIP_STYLE} />
+              <Tooltip formatter={(v) => [`${fmt(Number(v))} MWh`, 'Total']} {...TOOLTIP_STYLE} />
               <Bar dataKey="demanda_total" fill="#7B68EE" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -139,7 +139,7 @@ const [data, setData] = useState<DashboardData | null>(null)
               <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#2a2a3a" />
               <XAxis type="number" unit="%" tick={AXIS_TICK} />
               <YAxis type="category" dataKey="feature" width={130} tick={AXIS_TICK} />
-              <Tooltip formatter={(v: number) => [`${v}%`, 'Importancia']} {...TOOLTIP_STYLE} />
+              <Tooltip formatter={(v) => [`${fmt(Number(v))}%`, 'Importancia']} {...TOOLTIP_STYLE} />
               <Bar dataKey="valor" fill="#2ECC71" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
