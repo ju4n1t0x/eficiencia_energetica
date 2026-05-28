@@ -3,7 +3,7 @@ import {
   BarChart, Bar, LineChart, Line,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts'
-import { login, fetchDashboardData, type DashboardData } from '../api'
+import { fetchDashboardData, type DashboardData } from '../api'
 import ChartCard from '../components/ChartCard'
 import StatCard from '../components/StatCard'
 import './EdaPage.css'
@@ -51,10 +51,9 @@ const [data, setData] = useState<DashboardData | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    login()
-      .then(fetchDashboardData)
+    fetchDashboardData()
       .then(setData)
-      .catch(() => setError('No se pudo conectar con el backend. ¿Está corriendo en localhost:8000?'))
+      .catch(() => setError('No se pudo conectar con el backend.'))
       .finally(() => setLoading(false))
   }, [])
 

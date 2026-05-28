@@ -98,3 +98,18 @@
   color: #F7F052;
   text-decoration: underline;
 }
+
+.auth-error {
+  color: #ff6b6b;
+  font-size: 14px;
+  margin: 8px 0;
+  text-align: center;
+  background: rgba(255, 107, 107, 0.1);
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.auth-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
