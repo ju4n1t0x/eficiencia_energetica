@@ -9,6 +9,7 @@ engine = create_async_engine(
     echo=settings.DEBUG,
     pool_size=10,
     max_overflow=20,
+    pool_pre_ping=True,
 )
 
 # Fabrica de sesiones
@@ -17,6 +18,7 @@ AsyncSessionLocal = async_sessionmaker(
     class_=AsyncSession,
     expire_on_commit=False,
 )
+
 
 # HBase para todos los modelos ORM
 class Base(DeclarativeBase):
@@ -31,5 +33,3 @@ async def get_db():
         except Exception:
             await session.rollback()
             raise
-
-
