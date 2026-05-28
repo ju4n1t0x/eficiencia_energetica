@@ -43,6 +43,6 @@ services:
     depends_on:
       - backend
     ports:
-      - "80:80"
+      - "8888:80"
 volumes:
   ee_db_data:
