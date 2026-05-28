@@ -39,30 +39,52 @@ export interface DashboardData {
   resumen: Resumen
 }
 
+export interface RegisterData {
+  nombre: string
+  mail: string
+  password: string
+}
+
 // ── Helpers de red ─────────────────────────────────────────────────────────
 
-async function get<T>(token: string, path: string): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  })
+async function get<T>(token: string | undefined, path: string): Promise<T> {
+  const headers: Record<string, string> = {}
+  if (token) headers.Authorization = `Bearer ${token}`
+  const res = await fetch(`${BASE_URL}${path}`, { headers })
   if (!res.ok) throw new Error(`Error ${res.status} en ${path}`)
   return res.json()
 }
 
-// ── API pública ────────────────────────────────────────────────────────────
+// ── API pública ───────────────────────────────────────────────────────────
 
-export async function login(): Promise<string> {
+export async function login(mail: string, password: string): Promise<string> {
   const res = await fetch(`${BASE_URL}/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ mail: 'admin@cammesa.com', password: 'admin123' }),
+    body: JSON.stringify({ mail, password }),
   })
-  if (!res.ok) throw new Error('Login fallido')
+  if (!res.ok) throw new Error('Credenciales inválidas')
   const { access_token } = await res.json()
   return access_token
 }
 
-export async function fetchDashboardData(token: string): Promise<DashboardData> {
+export async function register(data: RegisterData): Promise<void> {
+  const res = await fetch(`${BASE_URL}/auth/registro`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      nombre: data.nombre,
+      mail: data.mail,
+      password: data.password,
+    }),
+  })
+  if (!res.ok) {
+    const error = await res.json()
+    throw new Error(error.detail || 'Error al registrar usuario')
+  }
+}
+
+export async function fetchDashboardData(token?: string): Promise<DashboardData> {
   const [mensual, estacion, categoria, importancia, resumen] = await Promise.all([
     get<DemandaMensual[]>(token, '/eda/demanda-mensual'),
     get<DemandaEstacion[]>(token, '/eda/demanda-por-estacion'),

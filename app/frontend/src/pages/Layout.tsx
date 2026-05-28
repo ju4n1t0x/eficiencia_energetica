@@ -8,18 +8,28 @@ import LoginComponent from "../components/LoginComponent"
 import './Layout.css'; 
 
 function Layout() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(() => {
+        return !!sessionStorage.getItem('token');
+    });
+
+    const handleLogin = () => {
+        setIsAuthenticated(true);
+    };
+
+    const handleLogout = () => {
+        sessionStorage.removeItem('token');
+        setIsAuthenticated(false);
+    };
 
     return (
         <div className="layout">
             <main className="layout-content">
                 <header className="page-header">
-                    <NavBar />
+                    <NavBar onLogout={handleLogout} isAuthenticated={isAuthenticated} />
                 </header>
                 
                 <section className="page-body">
                     <Routes>
-                        {/* Redirección por defecto al dashboard */}
                         <Route path="/" element={<Navigate to="/eda" replace />} />
                         <Route path="/eda" element={<EdaPage />} />
                         <Route 
@@ -27,11 +37,9 @@ function Layout() {
                             element={
                                 isAuthenticated 
                                 ? <CargaPage /> 
-                                : <LoginComponent onLogin={() => setIsAuthenticated(true)} />
+                                : <LoginComponent onLogin={handleLogin} />
                             } 
                         />
-                        
-                        {/* Placeholders para las otras rutas */}
                         <Route path="/predict" element={<div className="center"><h1>Próximamente: Predicción</h1></div>} />
                         <Route path="/docs" element={<div className="center"><h1>Próximamente: Documentación</h1></div>} />
                     </Routes>

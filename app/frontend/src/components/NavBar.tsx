@@ -2,7 +2,12 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './NavBar.css';
 
-const NavBar: React.FC = () => {
+interface NavBarProps {
+  onLogout: () => void;
+  isAuthenticated: boolean;
+}
+
+const NavBar: React.FC<NavBarProps> = ({ onLogout, isAuthenticated }) => {
   return (
     <nav className="navbar">
       <div className="navbar-inner">
@@ -27,6 +32,13 @@ const NavBar: React.FC = () => {
               Documentación
             </NavLink>
           </li>
+          {isAuthenticated && (
+            <li>
+              <button className="nav-button nav-logout" onClick={onLogout}>
+                Cerrar Sesión
+              </button>
+            </li>
+          )}
         </ul>
       </div>
     </nav>

@@ -16,7 +16,6 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 async def registro(
     body: RegisterRequest,
     db: AsyncSession = Depends(get_db),
-    _admin: User = Depends(require_admin),
 ):
     """Crea un nuevo usuario. Requiere ser admin."""
     existing = await db.execute(select(User).where(User.mail == body.mail))

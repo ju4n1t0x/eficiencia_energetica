@@ -42,3 +42,15 @@
   background-color: #FFB627;
   color: #16182B;
 }
+
+.nav-logout {
+  background-color: rgba(231, 76, 60, 0.15);
+  color: #e74c3c;
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  cursor: pointer;
+}
+
+.nav-logout:hover {
+  background-color: #e74c3c;
+  color: #fff;
+}
