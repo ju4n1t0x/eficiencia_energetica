@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import pandas as pd
 import io
 
-from core.dependencies import require_admin
+from core.dependencies import get_current_user
 from db.database import get_db
 from models.user import User
 from models.dataset_upload import DatasetUpload
@@ -16,31 +16,41 @@ import repositories.dataset_repo as repo
 router = APIRouter(prefix="/dataset", tags=["Dataset"])
 
 
-@router.post("/upload", response_model=UploadResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/upload", response_model=UploadResponse, status_code=status.HTTP_201_CREATED
+)
 async def upload_dataset(
     file: UploadFile = File(...),
     db: AsyncSession = Depends(get_db),
-    admin: User = Depends(require_admin),
+    current_user: User = Depends(get_current_user),
 ):
     if not file.filename.endswith(".csv"):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="Solo se aceptan archivos .csv")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Solo se aceptan archivos .csv",
+        )
 
     contenido = await file.read()
     try:
         df_crudo = pd.read_csv(io.BytesIO(contenido))
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail=f"Error al leer el CSV: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Error al leer el CSV: {str(e)}",
+        )
 
     try:
         df_limpio, stats = PipelineDemanda().limpiar(df_crudo)
     except ValueError as e:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(e)
+        )
 
     if len(df_limpio) == 0:
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                            detail="El CSV no contiene registros válidos después de la limpieza.")
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="El CSV no contiene registros válidos después de la limpieza.",
+        )
 
     metricas_antes = modelo.last_metrics if modelo.is_ready else None
 
@@ -49,7 +59,7 @@ async def upload_dataset(
     metricas_despues = await modelo.entrenar(db)
 
     upload_log = DatasetUpload(
-        usuario_id=admin.id,
+        usuario_id=current_user.id,
         nombre_archivo=file.filename,
         registros_totales=stats["registros_originales"],
         registros_insertados=stats["registros_insertados"],
@@ -72,6 +82,6 @@ async def upload_dataset(
 @router.get("/historial", response_model=list[HistorialItem])
 async def historial_uploads(
     db: AsyncSession = Depends(get_db),
-    _: User = Depends(require_admin),
+    current_user: User = Depends(get_current_user),
 ):
     return await repo.get_historial(db)
