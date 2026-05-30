@@ -95,6 +95,56 @@ export async function fetchDashboardData(token?: string): Promise<DashboardData>
   return { mensual, estacion, categoria, importancia, resumen }
 }
 
+// ── Tipos para predicción ─────────────────────────────────────────────────
+
+export interface Catalogos {
+  tipo_agente: string[]
+  region: string[]
+  provincia: string[]
+  categoria_area: string[]
+  categoria_demanda: string[]
+  tarifa: string[]
+  categoria_tarifa: string[]
+  estacion: string[]
+}
+
+export interface PrediccionRequest {
+  anio: number
+  mes: number
+  tipo_agente: string
+  region: string
+  provincia: string
+  categoria_area: string
+  categoria_demanda: string
+  categoria_tarifa: string
+  estacion: string
+}
+
+export interface PrediccionResponse {
+  demanda_estimada_mwh: number
+  unidad: string
+  modelo: string
+}
+
+export async function getCatalogos(): Promise<Catalogos> {
+  const res = await fetch(`${BASE_URL}/modelos/catalogos`)
+  if (!res.ok) throw new Error('Error al obtener catálogos')
+  return res.json()
+}
+
+export async function predecir(data: PrediccionRequest): Promise<PrediccionResponse> {
+  const res = await fetch(`${BASE_URL}/modelos/predecir`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}))
+    throw new Error(err.detail || `Error ${res.status}`)
+  }
+  return res.json()
+}
+
 export async function uploadDataset(token: string, file: File): Promise<any> {
   const formData = new FormData()
   formData.append('file', file)

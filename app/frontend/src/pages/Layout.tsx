@@ -4,8 +4,10 @@ import Footer from "../components/Footer";
 import NavBar from "../components/NavBar"
 import EdaPage from "./EdaPage"
 import CargaPage from "./CargaPage"
+import PredictPage from "./PredictPage"
+import DocsPage from "./DocsPage"
 import LoginComponent from "../components/LoginComponent"
-import './Layout.css'; 
+import './Layout.css';
 
 function Layout() {
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -40,8 +42,8 @@ function Layout() {
                                 : <LoginComponent onLogin={handleLogin} />
                             } 
                         />
-                        <Route path="/predict" element={<div className="center"><h1>Próximamente: Predicción</h1></div>} />
-                        <Route path="/docs" element={<div className="center"><h1>Próximamente: Documentación</h1></div>} />
+                        <Route path="/predict" element={<PredictPage />} />
+                        <Route path="/docs" element={<DocsPage />} />
                     </Routes>
                 </section>
             </main>
