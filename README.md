@@ -20,16 +20,15 @@ Como entrega complementaria, se desarrolló una **herramienta web full-stack** q
 
 ## Integrantes — Grupo 34
 
-| Nombre | GitHub |
-|--------|--------|
-| Ivan Porcari | — |
-| Marcelo Saucedo | — |
-| Rodrigo Zamora | — |
-| Gaspar Giannitrapani | — |
-| Stefania Martos | — |
-| Juan Ignacio Sasia | — |
-| Juan José Muñoz Franchi | [@ju4n1t0x](https://github.com/ju4n1t0x) |
-| Jorge Nicolás Segovia | — |
+
+- Ivan Porcari 
+- Marcelo Saucedo 
+- Rodrigo Zamora
+- Gaspar Giannitrapani 
+- Stefania Martos
+- Juan Ignacio Sasia 
+- Juan José Muñoz Franchi 
+- Jorge Nicolás Segovia 
 
 ### Docentes
 
